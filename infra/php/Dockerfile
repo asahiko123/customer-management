@@ -3,10 +3,15 @@ FROM php:8.1-fpm-buster
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update && \
-  apt-get -y install --no-install-recommends git unzip libzip-dev libicu-dev libonig-dev && \
+  apt-get -y install --no-install-recommends git unzip libzip-dev libicu-dev libonig-dev curl gnupg && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
   docker-php-ext-install intl pdo_mysql zip bcmath
+
+
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install npm@latest -g
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 
